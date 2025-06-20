@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "151850850329",
+    "project_id": "fir-chat-app-d8c91",
+    "storage_bucket": "fir-chat-app-d8c91.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:151850850329:android:0b1775538237af1ac63288",
+        "android_client_info": {
+          "package_name": "com.technicology.chatty"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC029ArozDJmE5q_KZLOabToW17H2Z3JzY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

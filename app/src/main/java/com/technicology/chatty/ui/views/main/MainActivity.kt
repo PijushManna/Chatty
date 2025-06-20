@@ -1,4 +1,4 @@
-package com.technicology.chatty.ui.main
+package com.technicology.chatty.ui.views.main
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

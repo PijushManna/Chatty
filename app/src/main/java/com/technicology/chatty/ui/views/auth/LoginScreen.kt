@@ -33,6 +33,7 @@ import com.technicology.chatty.repo.validations.Validator.isLenValid
 import com.technicology.chatty.ui.components.SignUpOrLoginInputText
 import com.technicology.chatty.ui.components.SubmitButton
 import com.technicology.chatty.ui.enum.InputType
+import com.technicology.chatty.ui.navigation.HOME_SCREEN
 import com.technicology.chatty.ui.navigation.SIGNUP_SCREEN
 import com.technicology.chatty.ui.theme.ChattyTheme
 
@@ -45,8 +46,8 @@ fun LoginScreen(viewModel: AuthViewModel, navController: NavController) {
     val context = LocalContext.current
 
     LaunchedEffect(email, password) {
-        if (Validator.isEmailValid(email) && isLenValid(password)){
-            isButtonEnabled =  true
+        if (Validator.isEmailValid(email) && isLenValid(password)) {
+            isButtonEnabled = true
         }
     }
 
@@ -55,57 +56,61 @@ fun LoginScreen(viewModel: AuthViewModel, navController: NavController) {
             Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
         }
     }
-
-    Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.Top) {
-        Image(
-            painter = painterResource(R.drawable.ic_launcher_foreground),
-            contentDescription = "Logo",
-            modifier = Modifier
-                .padding(16.dp)
-                .size(150.dp)
-                .align(Alignment.CenterHorizontally)
-        )
-        Spacer(Modifier.height(40.dp))
-        Text(
-            text = "Login ".uppercase(),
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 24.dp),
-            style = MaterialTheme.typography.titleLarge
-        )
-        SignUpOrLoginInputText(inputType = InputType.EMAIL, email) {
-            email = it
-        }
-        SignUpOrLoginInputText(inputType = InputType.PASSWORD, password) {
-            password = it
-        }
-
-        SubmitButton(
-            Modifier
-                .align(Alignment.End)
-                .padding(horizontal = 16.dp, vertical = 16.dp),
-            "Login",
-            isEnabled = isButtonEnabled
-        ) {
-            viewModel.login(email, password)
-        }
-        Spacer(Modifier.weight(1F))
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.align(Alignment.CenterHorizontally)
-        ) {
-            Text("Don't have an account?")
-            TextButton(onClick = {
-                navController.navigate(SIGNUP_SCREEN)
-            }, Modifier.padding(0.dp)) {
-                Text("Create New")
+    if (viewModel.isUserLoggedIn()) {
+        navController.navigate(HOME_SCREEN)
+    } else {
+        Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.Top) {
+            Image(
+                painter = painterResource(R.drawable.ic_launcher_foreground),
+                contentDescription = "Logo",
+                modifier = Modifier
+                    .padding(16.dp)
+                    .size(150.dp)
+                    .align(Alignment.CenterHorizontally)
+            )
+            Spacer(Modifier.height(40.dp))
+            Text(
+                text = "Login ".uppercase(),
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 24.dp),
+                style = MaterialTheme.typography.titleLarge
+            )
+            SignUpOrLoginInputText(inputType = InputType.EMAIL, email) {
+                email = it
             }
+            SignUpOrLoginInputText(inputType = InputType.PASSWORD, password) {
+                password = it
+            }
+
+            SubmitButton(
+                Modifier
+                    .align(Alignment.End)
+                    .padding(horizontal = 16.dp, vertical = 16.dp),
+                "Login",
+                isEnabled = isButtonEnabled
+            ) {
+                if (viewModel.login(email, password)) {
+                    navController.navigate(HOME_SCREEN)
+                }
+            }
+            Spacer(Modifier.weight(1F))
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            ) {
+                Text("Don't have an account?")
+                TextButton(onClick = {
+                    navController.navigate(SIGNUP_SCREEN)
+                }, Modifier.padding(0.dp)) {
+                    Text("Create New")
+                }
+            }
+            Spacer(Modifier.height(16.dp))
         }
-        Spacer(Modifier.height(16.dp))
     }
 }
 
 @Preview(showBackground = true)
 @Composable
 private fun PreviewLoginScreen() {
-    ChattyTheme {
-    }
+    ChattyTheme {}
 }

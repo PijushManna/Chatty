@@ -33,8 +33,8 @@ import com.technicology.chatty.ui.components.PasswordValidatorSection
 import com.technicology.chatty.ui.components.SignUpOrLoginInputText
 import com.technicology.chatty.ui.components.SubmitButton
 import com.technicology.chatty.ui.enum.InputType
+import com.technicology.chatty.ui.navigation.HOME_SCREEN
 import com.technicology.chatty.ui.navigation.LOGIN_SCREEN
-import com.technicology.chatty.ui.navigation.SIGNUP_SCREEN
 import com.technicology.chatty.ui.theme.ChattyTheme
 
 @Composable
@@ -46,7 +46,7 @@ fun SignUpScreen(viewModel: AuthViewModel, navController: NavController) {
     val context = LocalContext.current
 
     LaunchedEffect(email, password) {
-        if(Validator.isEmailValid(email) && Validator.isPasswordValid(password)){
+        if (Validator.isEmailValid(email) && Validator.isPasswordValid(password)) {
             isButtonEnabled = true
         }
     }
@@ -86,8 +86,8 @@ fun SignUpScreen(viewModel: AuthViewModel, navController: NavController) {
             "Sign Up",
             isEnabled = isButtonEnabled
         ) {
-            if(viewModel.signUp(email, password) == true){
-                navController.navigate(SIGNUP_SCREEN)
+            if (viewModel.signUp(email, password)) {
+                navController.navigate(HOME_SCREEN)
             }
         }
         Spacer(Modifier.weight(1F))

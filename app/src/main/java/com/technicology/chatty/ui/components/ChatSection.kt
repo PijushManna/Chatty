@@ -14,22 +14,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.technicology.chatty.R
 import com.technicology.chatty.ui.theme.ChattyTheme
-import com.technicology.chatty.ui.views.chat.ChatScreen
 
 @Composable
-fun ChatSection(userName: String, timestamp: String) {
+fun ChatSection(userName: String, timestamp: String, image: String, chats: List<String>) {
     Column{
         Row(Modifier.fillMaxWidth().padding(8.dp)) {
-            ProfilePicture(Modifier, image = R.drawable.ic_launcher_background)
+            ProfilePicture(Modifier, image = image)
             Spacer(Modifier.width(8.dp))
             Column {
                 UsernameWithTimestamp(name = userName, timestamp = timestamp)
                 LazyColumn{
-                    items(3) {
-                        ChatBubble("Sample message")
+                    items(chats.size) {
+                        ChatBubble(chats[it])
                         Spacer(Modifier.height(4.dp))
                     }
                 }
@@ -39,7 +36,7 @@ fun ChatSection(userName: String, timestamp: String) {
 }
 
 @Composable
-fun ReversedChatSection(userName: String, timestamp: String) {
+fun ReversedChatSection(userName: String, timestamp: String, image: String) {
     Column(horizontalAlignment = Alignment.End, modifier = Modifier.fillMaxWidth()){
         Row(Modifier.fillMaxWidth().padding(8.dp), horizontalArrangement = Arrangement.End) {
             Spacer(Modifier.height(16.dp))
@@ -52,7 +49,7 @@ fun ReversedChatSection(userName: String, timestamp: String) {
                     }
                 }
             }
-            ProfilePicture(Modifier, image = R.drawable.ic_launcher_background)
+            ProfilePicture(Modifier, image = image)
         }
     }
 }
@@ -61,6 +58,6 @@ fun ReversedChatSection(userName: String, timestamp: String) {
 @Composable
 private fun PreviewChatScreen() {
     ChattyTheme {
-        ReversedChatSection("username","8:00 PM")
+        ReversedChatSection("username","8:00 PM","https://picsum.photos/200/300")
     }
 }

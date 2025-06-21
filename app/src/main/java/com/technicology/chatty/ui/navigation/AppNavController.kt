@@ -32,8 +32,9 @@ fun AppNavController() {
             HomeScreen(viewModel = homeViewModel, navController)
         }
 
-        composable(CHAT_SCREEN) {
-            ChatScreen(chatViewModel = chatViewModel, navController)
+        composable("$CHAT_SCREEN/{chatId}") {
+            val chatId = it.arguments?.getString("chatId")
+            ChatScreen(chatViewModel = chatViewModel, navController, chatId)
         }
     }
 }

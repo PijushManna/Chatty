@@ -1,6 +1,5 @@
 package com.technicology.chatty.ui.components
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -9,15 +8,18 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.technicology.chatty.R
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 
 @Composable
-fun ProfilePicture(modifier: Modifier = Modifier, image: Int) {
-    Image(
-        painter = painterResource(image),
+fun ProfilePicture(modifier: Modifier = Modifier, image: String) {
+    AsyncImage(
+        model = ImageRequest.Builder(LocalContext.current).data(image).build(),
         contentDescription = "User logo",
+        contentScale = ContentScale.FillBounds,
         modifier = modifier
             .padding(horizontal = 8.dp)
             .size(42.dp)

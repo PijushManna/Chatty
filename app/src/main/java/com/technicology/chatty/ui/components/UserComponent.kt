@@ -20,7 +20,7 @@ fun UserComponent(user:HomeScreenUserModel, onClick:(HomeScreenUserModel)-> Unit
     Row(Modifier.fillMaxWidth().padding(8.dp).clickable{
         onClick(user)
     }) {
-        ProfilePicture(Modifier, image = R.drawable.ic_launcher_background)
+        ProfilePicture(Modifier, image = user.image)
         Spacer(Modifier.width(8.dp))
         Column {
             UsernameWithTimestamp(name = user.name, timestamp = user.timeStamp)

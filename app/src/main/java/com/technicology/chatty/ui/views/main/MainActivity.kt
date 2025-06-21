@@ -11,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.technicology.chatty.repo.manager.FirebaseDbManager
 import com.technicology.chatty.ui.navigation.AppNavController
 import com.technicology.chatty.ui.theme.ChattyTheme
 
@@ -18,6 +19,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        FirebaseDbManager.fetchUsers()
         setContent {
             ChattyTheme {
                 AppNavController()

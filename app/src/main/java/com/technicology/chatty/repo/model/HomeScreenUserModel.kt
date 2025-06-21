@@ -6,5 +6,6 @@ data class HomeScreenUserModel(
     var email: String,
     var image: String,
     var timeStamp: String,
-    var lastMessage: String
+    var lastMessage: String,
+    var chatId: String
 )

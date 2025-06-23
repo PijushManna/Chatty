@@ -1,4 +1,19 @@
 <resources>
     <string name="app_name">Chatty</string>
     <string name="title_activity_main">MainActivity</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Password</string>
+    <string name="password_rule">
+        Must be at least 6 characters, 1 uppercase letter, 1 lowercase letter, 1 symbol, 1 number
+    </string>
+    <string name="continue_btn">Continue</string>
+    <string name="or">or</string>
+    <string name="google_signup">Sign up with Google</string>
+    <string name="terms_prefix">By signing up, you agree to our </string>
+    <string name="terms_link"> <p>Terms and Conditions</p></string>
+    <string name="avatar_desc">Avatar description\n</string>
+    <string name="label_nickname">nickname</string>
+    <string name="pick_avatar">Pick Avatar</string>
+    <string name="about">About</string>
+    <string name="hey_there_i_am_using_chatty">Hey, there I am using Chatty!!</string>
 </resources>

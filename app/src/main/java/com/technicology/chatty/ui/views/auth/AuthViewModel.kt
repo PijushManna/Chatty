@@ -1,22 +1,52 @@
 package com.technicology.chatty.ui.views.auth
 
 import androidx.lifecycle.ViewModel
-import com.technicology.chatty.repo.manager.FirebaseAuthManager
+import androidx.lifecycle.viewModelScope
+import com.technicology.chatty.repo.auth.AuthRepo
+import dagger.hilt.android.lifecycle.HiltViewModel
+import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 
-class AuthViewModel : ViewModel() {
-    var auth = FirebaseAuthManager
-    var message = MutableStateFlow<String>("")
+@HiltViewModel
+class AuthViewModel @Inject constructor(private val authRepo: AuthRepo) : ViewModel() {
+    private val _authUiState = MutableStateFlow<AuthUiState>(AuthUiState.None)
+    val authUiState: StateFlow<AuthUiState> = _authUiState
 
-    fun signUp(email: String, password: String): Boolean{
-        return auth.signUp(email,password)
+    fun signUp(email: String, password: String) {
+        viewModelScope.launch {
+            authRepo.signUp(email, password) { isSuccessful, e ->
+
+                _authUiState.value =
+                    if (isSuccessful) AuthUiState.Successful else AuthUiState.Failed(
+                        e?.localizedMessage ?: "Something went wrong"
+                    )
+            }
+        }
     }
 
-    fun login(email: String, password: String): Boolean {
-       return auth.login(email, password)
+    fun updateUser(nickname: String, about: String, avatar:Int){
+        viewModelScope.launch {
+            authRepo.apply {
+                updateNickname(nickname)
+                updateAbout(about)
+                updateAvatar(avatar)
+                updateCurrentUserInLocal()
+            }
+        }
     }
 
-    fun logout() = auth.logout()
+    fun isUserSignedIn() = authRepo.isUserSignedIn()
 
-    fun isUserLoggedIn() = auth.isUserLoggedIn()
+    fun googleSignUp(){
+
+    }
+
+    fun login(email: String, password: String) {
+//        return auth.login(email, password)
+    }
+
+    fun logout(){}
+
 }

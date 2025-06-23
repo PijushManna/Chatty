@@ -2,9 +2,12 @@ package com.technicology.chatty.ui.views.home
 
 import androidx.lifecycle.ViewModel
 import com.technicology.chatty.repo.model.HomeScreenUserModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 
-class HomeViewModel  : ViewModel(){
+@HiltViewModel
+class HomeViewModel  @Inject constructor(): ViewModel(){
     val homeScreenUserModel = MutableStateFlow<List<HomeScreenUserModel>>(emptyList())
 
     init {

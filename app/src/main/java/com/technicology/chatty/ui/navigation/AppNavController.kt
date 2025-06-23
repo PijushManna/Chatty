@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.technicology.chatty.ui.views.auth.AuthViewModel
+import com.technicology.chatty.ui.views.auth.AvatarNicknameScreen
 import com.technicology.chatty.ui.views.auth.LoginScreen
 import com.technicology.chatty.ui.views.auth.SignUpScreen
 import com.technicology.chatty.ui.views.chat.ChatScreen
@@ -19,13 +20,24 @@ fun AppNavController() {
     val homeViewModel: HomeViewModel = viewModel<HomeViewModel>()
     val chatViewModel: ChatViewModel = viewModel<ChatViewModel>()
     val navController = rememberNavController()
-    NavHost(navController, LOGIN_SCREEN) {
+    var nextScreen = if(authViewModel.isUserSignedIn()) HOME_SCREEN else SIGNUP_SCREEN
+
+    NavHost(navController, SIGNUP_SCREEN) {
         composable(LOGIN_SCREEN) {
             LoginScreen(authViewModel, navController)
         }
 
         composable(SIGNUP_SCREEN) {
-            SignUpScreen(authViewModel, navController)
+            SignUpScreen(authViewModel) {
+                navController.navigate(AVATAR_NICKNAME_SCREEN)
+            }
+        }
+
+        composable(AVATAR_NICKNAME_SCREEN) {
+            AvatarNicknameScreen { nickname, about, avatar ->
+                authViewModel.updateUser(nickname, about, avatar)
+                navController.navigate(HOME_SCREEN)
+            }
         }
 
         composable(HOME_SCREEN) {
@@ -42,3 +54,4 @@ const val LOGIN_SCREEN = "login"
 const val SIGNUP_SCREEN = "signup"
 const val HOME_SCREEN = "home"
 const val CHAT_SCREEN = "chat"
+const val AVATAR_NICKNAME_SCREEN = "avatar_nickname"

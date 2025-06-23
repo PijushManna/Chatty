@@ -1,5 +1,6 @@
 package com.technicology.chatty.ui.views.auth
 
+import android.R.id.message
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -27,6 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.google.firebase.auth.FirebaseAuth
 import com.technicology.chatty.R
 import com.technicology.chatty.repo.validations.Validator
 import com.technicology.chatty.repo.validations.Validator.isLenValid
@@ -42,71 +44,72 @@ fun LoginScreen(viewModel: AuthViewModel, navController: NavController) {
     var email: String by rememberSaveable { mutableStateOf("") }
     var password: String by rememberSaveable { mutableStateOf("") }
     var isButtonEnabled by rememberSaveable { mutableStateOf(false) }
-    val message by viewModel.message.collectAsStateWithLifecycle()
+//    val message by viewModel.message.collectAsStateWithLifecycle()
     val context = LocalContext.current
-
-    LaunchedEffect(email, password) {
-        if (Validator.isEmailValid(email) && isLenValid(password)) {
-            isButtonEnabled = true
-        }
-    }
-
-    LaunchedEffect(message) {
-        if (!message.isBlank()) {
-            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
-        }
-    }
-    if (viewModel.isUserLoggedIn()) {
-        navController.navigate(HOME_SCREEN)
-    } else {
-        Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.Top) {
-            Image(
-                painter = painterResource(R.drawable.ic_launcher_foreground),
-                contentDescription = "Logo",
-                modifier = Modifier
-                    .padding(16.dp)
-                    .size(150.dp)
-                    .align(Alignment.CenterHorizontally)
-            )
-            Spacer(Modifier.height(40.dp))
-            Text(
-                text = "Login ".uppercase(),
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 24.dp),
-                style = MaterialTheme.typography.titleLarge
-            )
-            SignUpOrLoginInputText(inputType = InputType.EMAIL, email) {
-                email = it
-            }
-            SignUpOrLoginInputText(inputType = InputType.PASSWORD, password) {
-                password = it
-            }
-
-            SubmitButton(
-                Modifier
-                    .align(Alignment.End)
-                    .padding(horizontal = 16.dp, vertical = 16.dp),
-                "Login",
-                isEnabled = isButtonEnabled
-            ) {
-                if (viewModel.login(email, password)) {
-                    navController.navigate(HOME_SCREEN)
-                }
-            }
-            Spacer(Modifier.weight(1F))
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.align(Alignment.CenterHorizontally)
-            ) {
-                Text("Don't have an account?")
-                TextButton(onClick = {
-                    navController.navigate(SIGNUP_SCREEN)
-                }, Modifier.padding(0.dp)) {
-                    Text("Create New")
-                }
-            }
-            Spacer(Modifier.height(16.dp))
-        }
-    }
+    FirebaseAuth.getInstance().signOut()
+//
+//    LaunchedEffect(email, password) {
+//        if (Validator.isEmailValid(email) && isLenValid(password)) {
+//            isButtonEnabled = true
+//        }
+//    }
+//
+//    LaunchedEffect(message) {
+//        if (!message.isBlank()) {
+//            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+//        }
+//    }
+//    if (viewModel.isUserLoggedIn()) {
+//        navController.navigate(HOME_SCREEN)
+//    } else {
+//        Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.Top) {
+//            Image(
+//                painter = painterResource(R.drawable.ic_launcher_foreground),
+//                contentDescription = "Logo",
+//                modifier = Modifier
+//                    .padding(16.dp)
+//                    .size(150.dp)
+//                    .align(Alignment.CenterHorizontally)
+//            )
+//            Spacer(Modifier.height(40.dp))
+//            Text(
+//                text = "Login ".uppercase(),
+//                modifier = Modifier.padding(horizontal = 16.dp, vertical = 24.dp),
+//                style = MaterialTheme.typography.titleLarge
+//            )
+//            SignUpOrLoginInputText(inputType = InputType.EMAIL, email) {
+//                email = it
+//            }
+//            SignUpOrLoginInputText(inputType = InputType.PASSWORD, password) {
+//                password = it
+//            }
+//
+//            SubmitButton(
+//                Modifier
+//                    .align(Alignment.End)
+//                    .padding(horizontal = 16.dp, vertical = 16.dp),
+//                "Login",
+//                isEnabled = isButtonEnabled
+//            ) {
+//                if (viewModel.login(email, password)) {
+//                    navController.navigate(HOME_SCREEN)
+//                }
+//            }
+//            Spacer(Modifier.weight(1F))
+//            Row(
+//                verticalAlignment = Alignment.CenterVertically,
+//                modifier = Modifier.align(Alignment.CenterHorizontally)
+//            ) {
+//                Text("Don't have an account?")
+//                TextButton(onClick = {
+//                    navController.navigate(SIGNUP_SCREEN)
+//                }, Modifier.padding(0.dp)) {
+//                    Text("Create New")
+//                }
+//            }
+//            Spacer(Modifier.height(16.dp))
+//        }
+//    }
 }
 
 @Preview(showBackground = true)

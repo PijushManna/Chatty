@@ -35,7 +35,7 @@ class AppModule {
 
     @Singleton
     @Provides
-    fun getRecipientsRepo(appDatabase: AppDatabase): RecipientsRepo = RecipientsRepoImpl(appDatabase.recipientsDao)
+    fun getRecipientsRepo(appDatabase: AppDatabase): RecipientsRepo = RecipientsRepoImpl(appDatabase.recipientsDao, appDatabase.userDao)
 
     @Singleton
     @Provides

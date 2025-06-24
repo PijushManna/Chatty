@@ -11,6 +11,6 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface ChatsDao : BaseDao<Chats> {
     @Transaction
-    @Query("SELECT * FROM chats WHERE chatId =:chatId ORDER BY createdOn")
-    fun getChatsById(chatId: String):Flow<List<ConsumableChatModel>?>
+    @Query("SELECT * FROM chats WHERE chatId = :chatId ORDER BY createdOn")
+    fun getChatsById(chatId: String): Flow<List<ConsumableChatModel>?>
 }

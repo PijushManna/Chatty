@@ -6,13 +6,15 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.technicology.chatty.repo.local.dao.RecipientsDao
+import com.technicology.chatty.repo.local.dao.UserDao
 import com.technicology.chatty.repo.local.entity.Recipients
+import com.technicology.chatty.repo.local.entity.User
 import com.technicology.chatty.repo.model.ConsumableRecipientModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.runBlocking
 
-class RecipientsRepoImpl @Inject constructor(private val recipientsDao: RecipientsDao) :
+class RecipientsRepoImpl @Inject constructor(private val recipientsDao: RecipientsDao, private val userDao: UserDao) :
     RecipientsRepo {
     private val firebaseDatabase by lazy { FirebaseDatabase.getInstance() }
     private val firebaseUser by lazy { FirebaseAuth.getInstance().currentUser }
@@ -21,12 +23,17 @@ class RecipientsRepoImpl @Inject constructor(private val recipientsDao: Recipien
         return recipientsDao.getAllRecipients()
     }
 
-    private fun fetchRecipients() {
+    fun fetchRecipients() {
         firebaseDatabase.reference.child("recipients").child(firebaseUser?.uid.orEmpty())
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     runBlocking {
-                        snapshot.children.mapNotNull { it.getValue(Recipients::class.java) }.let {
+                        snapshot.children.mapNotNull { it.getValue(Recipients::class.java)?.let{
+                            storeUserInLocalDb(it.uid)
+                            it
+                        }
+
+                        }.let {
                             recipientsDao.insert(it)
                         }
                     }
@@ -37,6 +44,20 @@ class RecipientsRepoImpl @Inject constructor(private val recipientsDao: Recipien
             })
     }
 
+    fun storeUserInLocalDb(uid: String){
+        firebaseDatabase.reference.child("app_users").child(uid).addListenerForSingleValueEvent(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                runBlocking {
+                    snapshot.getValue(User::class.java)?.let {
+                        userDao.insert(it)
+                    }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+            }
+        })
+    }
     override fun addRecipient(uid: String) {
         val ref = firebaseDatabase.reference.child("recipients").child(firebaseUser?.uid.orEmpty())
             .child(uid)

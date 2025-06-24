@@ -16,4 +16,9 @@
     <string name="pick_avatar">Pick Avatar</string>
     <string name="about">About</string>
     <string name="hey_there_i_am_using_chatty">Hey, there I am using Chatty!!</string>
+    <string name="settings_title">Settings</string>
+    <string name="change_avatar">Change avatar</string>
+    <string name="nickname">nickname</string>
+    <string name="status">status</string>
+    <string name="sign_out">Sign Out</string>
 </resources>

@@ -71,7 +71,7 @@ fun HomeScreen(viewModel: HomeViewModel, navController: NavController) {
             LazyColumn(contentPadding = PaddingValues(vertical = 16.dp)) {
                 items(recipients) {
                     UserComponent(it) {
-                        navController.navigate("$CHAT_SCREEN/${it.recipients.chatId} ")
+                        navController.navigate("$CHAT_SCREEN/${it.recipients.chatId}")
                     }
                 }
             }

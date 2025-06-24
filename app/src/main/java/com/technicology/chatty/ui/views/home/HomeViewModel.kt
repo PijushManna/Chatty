@@ -23,17 +23,10 @@ class HomeViewModel  @Inject constructor(private val repo: RecipientsRepo, priva
             }catch (e:Exception){
 
             }
+
+//            repo.addRecipient("9N9JJeMUpCYXevUBjL7OcI3amij1")
+//            repo.addRecipient("UzXhsluZrQS2NONeWs6ziEuH0DC2")
+//            repo.addRecipient("qskP7AL1G2dC2WuN4EXsbdiGUwl1")
         }
-//        homeScreenUserModel.value = listOf(
-//            HomeScreenUserModel(
-//                "1", "Rakesh", "rakes@gmail.com", "", " 7:00 AM", "is simply dummy text of the printing and typesetting industry. "
-//            ),
-//            HomeScreenUserModel(
-//                "2", "Ritesh", "rites@gmail.com","", " 7:00 PM", "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
-//            ),
-//            HomeScreenUserModel(
-//                "3", "Tamal", "tamal@gmail.com", "", " 8:00 PM", "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
-//            )
-//        )
     }
 }

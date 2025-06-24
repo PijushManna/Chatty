@@ -26,7 +26,7 @@ import com.technicology.chatty.ui.theme.ChattyTheme
 fun ChatScreen(chatViewModel: ChatViewModel, navController: NavController, chatId: String?) {
     val chats = chatViewModel.chats.collectAsStateWithLifecycle(initialValue = emptyList())
 
-    chatViewModel.getChatsFromId(chatId)
+    chatViewModel.getChatsFromId(chatId?.trim().toString())
     Scaffold(topBar = {
         TopAppBar(title = {
             Text(
@@ -47,7 +47,9 @@ fun ChatScreen(chatViewModel: ChatViewModel, navController: NavController, chatI
                 }
             }
             Spacer(Modifier.weight(1F))
-            EnterMessageSection()
+            EnterMessageSection{
+                chatViewModel.addMessage(it)
+            }
         }
 
     }

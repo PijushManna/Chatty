@@ -4,6 +4,8 @@ import android.content.Context
 import androidx.room.Room
 import com.technicology.chatty.repo.auth.AuthRepo
 import com.technicology.chatty.repo.auth.AuthRepoImpl
+import com.technicology.chatty.repo.chats.ChatsRepo
+import com.technicology.chatty.repo.chats.ChatsRepoImpl
 import com.technicology.chatty.repo.local.db.AppDatabase
 import com.technicology.chatty.repo.recipients.RecipientsRepo
 import com.technicology.chatty.repo.recipients.RecipientsRepoImpl
@@ -34,4 +36,8 @@ class AppModule {
     @Singleton
     @Provides
     fun getRecipientsRepo(appDatabase: AppDatabase): RecipientsRepo = RecipientsRepoImpl(appDatabase.recipientsDao)
+
+    @Singleton
+    @Provides
+    fun getChatsRepo(appDatabase: AppDatabase): ChatsRepo = ChatsRepoImpl(appDatabase.chatsDao)
 }

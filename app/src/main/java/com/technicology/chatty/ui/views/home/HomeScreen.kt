@@ -38,7 +38,6 @@ import com.technicology.chatty.ui.theme.ChattyTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(viewModel: HomeViewModel, navController: NavController) {
-    val users = viewModel.homeScreenUserModel.collectAsStateWithLifecycle()
     val recipients by viewModel.recipients.collectAsStateWithLifecycle(initialValue = emptyList())
     var search by remember { mutableStateOf("") }
     val context = LocalContext.current
@@ -72,7 +71,7 @@ fun HomeScreen(viewModel: HomeViewModel, navController: NavController) {
             LazyColumn(contentPadding = PaddingValues(vertical = 16.dp)) {
                 items(recipients) {
                     UserComponent(it) {
-                        navController.navigate(CHAT_SCREEN)
+                        navController.navigate("$CHAT_SCREEN/${it.recipients.chatId} ")
                     }
                 }
             }

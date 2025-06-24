@@ -9,27 +9,32 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.technicology.chatty.R
+import com.technicology.chatty.repo.model.PreviewChatModel
 import com.technicology.chatty.ui.theme.ChattyTheme
-import com.technicology.chatty.ui.views.chat.ChatScreen
 
 @Composable
-fun ChatSection(userName: String, timestamp: String) {
-    Column{
-        Row(Modifier.fillMaxWidth().padding(8.dp)) {
-            ProfilePicture(Modifier, image = R.drawable.ic_launcher_background)
+fun ChatSection(model: PreviewChatModel) {
+    Column {
+        Row(Modifier
+            .fillMaxWidth()
+            .padding(8.dp)) {
+            ProfilePicture(Modifier, image = model.sender?.getAvatarImage() ?: 0)
             Spacer(Modifier.width(8.dp))
             Column {
-                UsernameWithTimestamp(name = userName, timestamp = timestamp)
-                LazyColumn{
-                    items(3) {
-                        ChatBubble("Sample message")
+                UsernameWithTimestamp(
+                    name = model.sender?.name.toString(),
+                    timestamp = model.chats[0].createdOn.toString()
+                )
+                LazyColumn {
+                    items(model.chats) {
+                        ChatBubble(it.message)
                         Spacer(Modifier.height(4.dp))
                     }
                 }
@@ -39,15 +44,20 @@ fun ChatSection(userName: String, timestamp: String) {
 }
 
 @Composable
-fun ReversedChatSection(userName: String, timestamp: String) {
-    Column(horizontalAlignment = Alignment.End, modifier = Modifier.fillMaxWidth()){
-        Row(Modifier.fillMaxWidth().padding(8.dp), horizontalArrangement = Arrangement.End) {
+fun ReversedChatSection(model: PreviewChatModel) {
+    Column(horizontalAlignment = Alignment.End, modifier = Modifier.fillMaxWidth()) {
+        Row(Modifier
+            .fillMaxWidth()
+            .padding(8.dp), horizontalArrangement = Arrangement.End) {
             Spacer(Modifier.height(16.dp))
             Column {
-                UsernameWithTimestamp(name = userName, timestamp = timestamp)
-                LazyColumn{
-                    items(3) {
-                        ReversedChatBubble("Sample message")
+                UsernameWithTimestamp(
+                    name = model.sender?.name.toString(),
+                    timestamp = model.chats[0].createdOn.toString()
+                )
+                LazyColumn {
+                    items(model.chats) {
+                        ReversedChatBubble(it.message)
                         Spacer(Modifier.height(4.dp))
                     }
                 }
@@ -61,6 +71,6 @@ fun ReversedChatSection(userName: String, timestamp: String) {
 @Composable
 private fun PreviewChatScreen() {
     ChattyTheme {
-        ReversedChatSection("username","8:00 PM")
+//        ReversedChatSection("username","8:00 PM")
     }
 }

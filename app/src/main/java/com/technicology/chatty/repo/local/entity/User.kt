@@ -17,5 +17,6 @@ data class User(
     var status: String,
     var isCurrentUser: Boolean
 ){
+    constructor() : this("","","","","","",0,"",true)
     fun getAvatarImage() = SessionData.avatars[avatar]
 }

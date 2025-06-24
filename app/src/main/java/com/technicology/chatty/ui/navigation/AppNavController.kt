@@ -22,7 +22,8 @@ fun AppNavController() {
     val navController = rememberNavController()
     var nextScreen = if(authViewModel.isUserSignedIn()) HOME_SCREEN else SIGNUP_SCREEN
 
-    NavHost(navController, SIGNUP_SCREEN) {
+
+    NavHost(navController, nextScreen) {
         composable(LOGIN_SCREEN) {
             LoginScreen(authViewModel, navController)
         }

@@ -12,19 +12,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.technicology.chatty.R
-import com.technicology.chatty.repo.model.HomeScreenUserModel
+import com.technicology.chatty.repo.model.ConsumableRecipientModel
 
 @Composable
-fun UserComponent(user:HomeScreenUserModel, onClick:(HomeScreenUserModel)-> Unit) {
+fun UserComponent(model: ConsumableRecipientModel, onClick:(ConsumableRecipientModel)-> Unit) {
     Row(Modifier.fillMaxWidth().padding(8.dp).clickable{
-        onClick(user)
+        onClick(model)
     }) {
-        ProfilePicture(Modifier, image = R.drawable.ic_launcher_background)
+        if (model.user == null) return
+        ProfilePicture(Modifier, image = model.user!!.getAvatarImage())
         Spacer(Modifier.width(8.dp))
         Column {
-            UsernameWithTimestamp(name = user.name, timestamp = user.timeStamp)
-            Text(text = user.lastMessage, maxLines = 1 , overflow = TextOverflow.Ellipsis, modifier = Modifier.padding(end = 16.dp))
+            UsernameWithTimestamp(name = model.user!!.name, timestamp = model.recipients.lastSeen)
+            Text(text = model.recipients.lastMessage, maxLines = 1 , overflow = TextOverflow.Ellipsis, modifier = Modifier.padding(end = 16.dp))
         }
     }
 }

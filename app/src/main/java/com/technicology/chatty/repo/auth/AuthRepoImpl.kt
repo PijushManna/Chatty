@@ -14,6 +14,8 @@ import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential.Companion.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.database.FirebaseDatabase
+import com.technicology.chatty.repo.local.dao.RecipientsDao
 import com.technicology.chatty.repo.local.dao.UserDao
 import com.technicology.chatty.repo.local.entity.User
 import com.technicology.chatty.repo.model.UserStatus
@@ -21,8 +23,9 @@ import com.technicology.chatty.utils.Keys
 import jakarta.inject.Inject
 import kotlinx.coroutines.runBlocking
 
-class AuthRepoImpl @Inject constructor(private val userDao: UserDao) : AuthRepo {
+class AuthRepoImpl @Inject constructor(private val userDao: UserDao, private val recipientsDao: RecipientsDao) : AuthRepo {
     private val firebaseAuth by lazy { FirebaseAuth.getInstance() }
+    private val firebaseDatabase by lazy { FirebaseDatabase.getInstance() }
     private lateinit var credentialManager: CredentialManager
     private lateinit var currentUser: User
 
@@ -41,7 +44,7 @@ class AuthRepoImpl @Inject constructor(private val userDao: UserDao) : AuthRepo 
                             phone = data.phoneNumber.orEmpty(),
                             about = "",
                             image = data.photoUrl.toString(),
-                            avatar = -1,
+                            avatar = 0,
                             status = UserStatus.ACTIVE.name,
                             isCurrentUser = true
                         )
@@ -75,6 +78,12 @@ class AuthRepoImpl @Inject constructor(private val userDao: UserDao) : AuthRepo 
 
     override suspend fun updateCurrentUserInLocal() {
         userDao.update(currentUser)
+        try {
+            firebaseDatabase.reference.child("app_users").child(currentUser.id).setValue(currentUser)
+        }catch (e: Exception){
+            e.printStackTrace()
+        }
+
     }
 
     override suspend fun signOut() {
@@ -86,6 +95,7 @@ class AuthRepoImpl @Inject constructor(private val userDao: UserDao) : AuthRepo 
                     credentialManager.clearCredentialState(clearRequest)
                 }
                 userDao.deleteAllUsers()
+                recipientsDao.deleteAllRecipients()
             } catch (e: ClearCredentialException) {
                 Log.e("FirebaseAuth", "Couldn't clear user credentials: ${e.localizedMessage}")
             }

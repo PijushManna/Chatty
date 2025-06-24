@@ -63,6 +63,8 @@ dependencies {
 
     // hilt
     implementation(libs.dagger.hilt)
+    implementation(libs.firebase.database)
+    implementation(libs.firebase.crashlytics.buildtools)
     ksp(libs.dagger.hilt.compiler)
     // Room
     implementation(libs.room.runtime)

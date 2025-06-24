@@ -5,6 +5,8 @@ import androidx.room.Room
 import com.technicology.chatty.repo.auth.AuthRepo
 import com.technicology.chatty.repo.auth.AuthRepoImpl
 import com.technicology.chatty.repo.local.db.AppDatabase
+import com.technicology.chatty.repo.recipients.RecipientsRepo
+import com.technicology.chatty.repo.recipients.RecipientsRepoImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -27,5 +29,9 @@ class AppModule {
 
     @Singleton
     @Provides
-    fun getAuthRepo(appDatabase: AppDatabase): AuthRepo = AuthRepoImpl(appDatabase.userDao)
+    fun getAuthRepo(appDatabase: AppDatabase): AuthRepo = AuthRepoImpl(appDatabase.userDao, appDatabase.recipientsDao)
+
+    @Singleton
+    @Provides
+    fun getRecipientsRepo(appDatabase: AppDatabase): RecipientsRepo = RecipientsRepoImpl(appDatabase.recipientsDao)
 }

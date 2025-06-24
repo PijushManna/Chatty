@@ -1,21 +1,17 @@
 package com.technicology.chatty.ui.views.home
 
-import android.widget.Toast
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SearchBar
-import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -25,11 +21,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.technicology.chatty.R
+import com.technicology.chatty.ui.components.AppSearchBar
 import com.technicology.chatty.ui.components.UserComponent
 import com.technicology.chatty.ui.navigation.CHAT_SCREEN
 import com.technicology.chatty.ui.theme.ChattyTheme
@@ -38,43 +39,39 @@ import com.technicology.chatty.ui.theme.ChattyTheme
 @Composable
 fun HomeScreen(viewModel: HomeViewModel, navController: NavController) {
     val users = viewModel.homeScreenUserModel.collectAsStateWithLifecycle()
+    val recipients by viewModel.recipients.collectAsStateWithLifecycle(initialValue = emptyList())
     var search by remember { mutableStateOf("") }
     val context = LocalContext.current
-    Scaffold(
-        topBar = {
+
+    Scaffold(topBar = {
+        Column {
             TopAppBar(
                 title = {
-                    Text("Chatty")
+                    Text(
+                        stringResource(R.string.app_name),
+                        style = MaterialTheme.typography.titleMedium.copy(
+                            fontWeight = FontWeight.ExtraBold, fontSize = 24.sp
+                        ),
+                        color = MaterialTheme.colorScheme.primary
+                    )
                 })
-        }) { padding ->
+        }
+    }, floatingActionButton = {
+        FloatingActionButton(
+            onClick = { }, containerColor = MaterialTheme.colorScheme.primary
+        ) {
+            Icon(
+                imageVector = Icons.Default.Add,
+                contentDescription = stringResource(R.string.app_name),
+                tint = MaterialTheme.colorScheme.onPrimary
+            )
+        }
+    }) { padding ->
         Column(Modifier.padding(padding)) {
-            SearchBar(inputField = {
-                SearchBarDefaults.InputField(query = search, onQueryChange = {
-                    search = it
-                }, onSearch = {
-                    Toast.makeText(context,it, Toast.LENGTH_SHORT).show()
-                }, expanded = false, onExpandedChange = {
-
-                }, leadingIcon = {
-                    Icon(Icons.Default.Search, contentDescription = null, modifier = Modifier.padding(horizontal = 8.dp))
-                }, trailingIcon = {
-                    if(search.isNotBlank()) {
-                        Icon(Icons.Default.Clear, contentDescription = null, modifier = Modifier.clickable{
-                            search = ""
-                        })
-                    }
-                }, placeholder = {
-                    Text("Type here to search")
-                })
-            } , expanded = false, onExpandedChange = {
-
-            } , modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp)
-            ) { }
+            AppSearchBar(search, context)
             LazyColumn(contentPadding = PaddingValues(vertical = 16.dp)) {
-                items(users.value) {
-                    UserComponent(it){
+                items(recipients) {
+                    UserComponent(it) {
                         navController.navigate(CHAT_SCREEN)
                     }
                 }
@@ -84,6 +81,7 @@ fun HomeScreen(viewModel: HomeViewModel, navController: NavController) {
     }
 
 }
+
 
 @Preview(showBackground = true)
 @Composable

@@ -47,6 +47,10 @@ class AuthViewModel @Inject constructor(private val authRepo: AuthRepo) : ViewMo
 //        return auth.login(email, password)
     }
 
-    fun logout(){}
+    fun signOut(){
+        viewModelScope.launch {
+            authRepo.signOut()
+        }
+    }
 
 }
